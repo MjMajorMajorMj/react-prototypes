@@ -9,7 +9,7 @@ class Stopwatch extends Component {
             status: 'stopped',
             start: null,
             elapsed: 0,
-            lapTime: 0,
+            lapArray: []
         };
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
@@ -48,17 +48,19 @@ class Stopwatch extends Component {
         this.setState({
             status: 'stopped',
             start: null,
-            elapsed: 0
+            elapsed: 0,
+            lapArray: []
         })
     }
     lap() {
-        const { elapsed } = this.state;
+        const { elapsed, lapArray } = this.state;
+        console.log("State before lap: ", this.state)
         this.setState({
-            lapTime: elapsed
-        });
+            lapArray: [...lapArray, elapsed]
+        },()=>{console.log("State after lap: ", this.state)});
     }
     render() {
-        const { elapsed, status, lapTime } = this.state;
+        const { elapsed, status, lapArray } = this.state;
         return (
             <div className="jumbotron">
                 <h1 className="display-3"><Time elapsed={elapsed} /></h1>
@@ -70,7 +72,7 @@ class Stopwatch extends Component {
                     <button onClick={this.reset} className="btn btn-outline-warning mx-3">Reset</button>
                     <button onClick={this.lap} className="btn btn-outline-primary mx-3">Lap</button>
                 </p>
-                <Lap lapTime={lapTime} />
+                <Lap lapTimes={lapArray} />
             </div>
         )
     };

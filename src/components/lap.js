@@ -3,37 +3,23 @@ import React, { Component } from 'react';
 class Lap extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            hour: 0,
-            min: 0,
-            sec: 0,
-            ms: 0,
-            laps: []
-        }
+        this.formatTime = this.formatTime.bind(this);
     }
-    componentWillReceiveProps(nextProps) {
-        console.log('lap received new props')
-        const { lapTime } = nextProps;
-        const sec = lapTime / 1000;
-        const min = sec / 60;
-        this.setState({
-            hour: Math.floor(min / 60),
-            min: Math.floor(min % 60),
-            sec: Math.floor(sec % 60),
-            ms: Math.floor(lapTime % 100)
-        });
-        this.formatTime();
-    }
-    formatTime() {
-        const { hour, min, sec, ms, laps } = this.state;
-        laps.push(hour + ":" + min + ":" + sec + "." + ms);
+    formatTime(lapTime) {
+        const totalSec = lapTime / 1000;
+        const totalMin = totalSec / 60;
+        const hour = Math.floor(totalMin / 60);
+        const min = Math.floor(totalMin % 60);
+        const sec = Math.floor(totalSec % 60);
+        const ms = Math.floor(lapTime % 100);
+        return hour + ":" + min + ":" + sec + "." + ms;
     }
     render() {
-        const { laps } = this.state
-        const lapRow = laps.map((index) => {
+        const { lapTimes } = this.props;
+        const lapRow = lapTimes.map((item, index) => {
             return (
                 <tr key={index}>
-                    <td>{index}</td>
+                    <td className="text-center">{this.formatTime(item)}</td>
                 </tr>
             )
         });
@@ -42,7 +28,7 @@ class Lap extends Component {
                 <table className="table">
                     <thead className="thead-inverse">
                         <tr>
-                            <th>Lap</th>
+                            <th className="text-center">Lap</th>
                         </tr>
                     </thead>
                     <tbody>
