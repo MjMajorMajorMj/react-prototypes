@@ -38,6 +38,7 @@ class Stopwatch extends Component {
         const { status, start } = this.state;
         if (status === 'running') {
             this.setState({
+                ...this.state,
                 elapsed: new Date().getTime() - start,
             })
             setTimeout(this.update, 10);
